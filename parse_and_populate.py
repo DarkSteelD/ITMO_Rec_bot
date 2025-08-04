@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Скрипт для парсинга данных с сайтов магистерских программ ИТМО
+Скрипт для парсинга данных из Word документов с программами ИТМО
 и заполнения базы данных курсами и информацией о программах.
 """
 
@@ -8,7 +8,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from src.parsers.itmo_parser import ITMOParser
+from src.parsers.docx_parser import DocxParser
 from src.database.db_manager import DatabaseManager
 import logging
 
@@ -21,15 +21,15 @@ logger = logging.getLogger(__name__)
 def main():
     """Основная функция для парсинга и сохранения данных"""
     
-    logger.info("Начинаем парсинг сайтов ИТМО...")
+    logger.info("Начинаем парсинг Word документов с программами ИТМО...")
     
     # Инициализация парсера и базы данных
-    parser = ITMOParser()
+    parser = DocxParser()
     db = DatabaseManager()
     
     try:
-        # Парсинг всех программ
-        programs = parser.parse_all_programs()
+        # Парсинг всех .docx файлов в текущей директории
+        programs = parser.parse_all_docx_files(".")
         
         if not programs:
             logger.error("Не удалось спарсить ни одной программы")
@@ -38,9 +38,6 @@ def main():
         logger.info(f"Успешно спарсено {len(programs)} программ:")
         for program in programs:
             logger.info(f"- {program.name}: {len(program.courses)} курсов")
-        
-        # Сохранение в JSON для резервной копии
-        parser.save_to_json(programs)
         
         # Сохранение в базу данных
         logger.info("Сохраняем данные в базу данных...")

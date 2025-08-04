@@ -12,4 +12,5 @@ nltk>=3.8.0
 python-dotenv>=1.0.0
 aiohttp>=3.8.0
 selenium>=4.15.0
-webdriver-manager>=4.0.0 
+webdriver-manager>=4.0.0
+python-docx>=0.8.11 
